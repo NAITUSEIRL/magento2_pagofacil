@@ -1,0 +1,22 @@
+<?php
+
+// @codingStandardsIgnoreFile
+/**
+ * @var $block \NaitusEirl\PagoFacil\Block\Checkout\Success
+ */
+?>
+<form action="<?php echo $block->getData("submit_url") ?>" id="pagofacil-success" method="POST">
+    <input type="hidden" name="ct_monto" value="<?php echo $block->getData("amount") ?>">
+    <input type="hidden" name="ct_order_id" value="<?php echo $block->getData("order_id") ?>">
+    <input type="hidden" name="ct_email" value="<?php echo $block->getData("email") ?>">
+    <input type="hidden" name="ct_token_service" value="<?php echo $block->getData("token_service") ?>">
+    <input type="hidden" name="ct_token_tienda" value="<?php echo $block->getData("token_store") ?>">
+    <input type="hidden" name="ct_firma" value="<?php echo $block->getData("signature") ?>">
+</form>
+<script>
+    require(['jquery'], function($){
+        $(document).ready(function(){
+            $("#pagofacil-success").submit();
+        });
+    })
+</script>
