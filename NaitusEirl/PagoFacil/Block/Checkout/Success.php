@@ -14,21 +14,6 @@ use Magento\Payment\Helper\Data as PaymentHelper;
 class Success extends Template {
 
     /**
-     * @var string
-     */
-    const GATEWAY_URL = "https://sv1.tbk.cristiantala.cl/tbk/v2/initTransaction";
-
-    /**
-     * @var string
-     */
-    const GATEWAY_SANDBOX_URL = "https://dev-env.sv1.tbk.cristiantala.cl/tbk/v2/initTransaction";
-
-    /**
-     * @var string[]
-     */
-    protected $methodCode = PagoFacil::PAYMENT_METHOD_PAGOFACIL_CODE;
-
-    /**
      * @var PagoFacil
      */
     protected $method;
@@ -65,7 +50,7 @@ class Success extends Template {
     ) {
         $this->_orderFactory = $orderFactory;
         $this->onepage = $onepage;
-        $this->method = $paymentHelper->getMethodInstance($this->methodCode);
+        $this->method = $paymentHelper->getMethodInstance(PagoFacil::PAYMENT_METHOD_PAGOFACIL_CODE);
         $this->_encryptor = $encryptor;
         parent::__construct($context, $data);
 
@@ -130,7 +115,7 @@ class Success extends Template {
      * @return string
      */
     protected function getSubmitUrl($sandbox = false){
-        return $sandbox ? self::GATEWAY_SANDBOX_URL : self::GATEWAY_URL;
+        return $sandbox ? PagoFacil::GATEWAY_SANDBOX_URL : PagoFacil::GATEWAY_URL;
     }
 
 }

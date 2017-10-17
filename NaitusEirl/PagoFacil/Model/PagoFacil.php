@@ -2,9 +2,29 @@
 
 namespace NaitusEirl\PagoFacil\Model;
 
+use Magento\Sales\Model\Order;
+
 class PagoFacil extends \Magento\Payment\Model\Method\AbstractMethod
 {
+    /**
+     * @var string
+     */
     const PAYMENT_METHOD_PAGOFACIL_CODE = 'pagofacil';
+
+    /**
+     * @var string
+     */
+    const GATEWAY_URL = "https://sv1.tbk.cristiantala.cl/tbk/v2/initTransaction";
+
+    /**
+     * @var string
+     */
+    const GATEWAY_SANDBOX_URL = "https://dev-env.sv1.tbk.cristiantala.cl/tbk/v2/initTransaction";
+
+    /**
+     * @var string
+     */
+    const RESPONSE_CODE_COMPLETED = "COMPLETADA";
 
     /**
      * Payment method code
@@ -36,6 +56,10 @@ class PagoFacil extends \Magento\Payment\Model\Method\AbstractMethod
      * @var bool
      */
     protected $_canAuthorize = true;
+
+    public function createTransaction(Order $order,$data){
+
+    }
 
 
 }
