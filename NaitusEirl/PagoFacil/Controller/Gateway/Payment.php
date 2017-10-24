@@ -7,14 +7,13 @@ use Magento\Framework\App\Action\Action;
 use ctala\transaccion\classes\Response;
 use Magento\Framework\Controller\Result\Raw;
 use Magento\Framework\Webapi\Exception;
+use Magento\Sales\Model\Order\Email\Sender\InvoiceSender;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\OrderFactory;
 use NaitusEirl\PagoFacil\Model\PagoFacil;
 use Magento\Payment\Helper\Data as PaymentHelper;
-use Magento\Sales\Model\Order\Email\Sender\InvoiceSender;
 
-
-class Callback extends \Magento\Framework\App\Action\Action
+class Payment extends \Magento\Framework\App\Action\Action
 {
     /** @var \Magento\Framework\Controller\Result\JsonFactory */
     protected $jsonResultFactory;
@@ -88,18 +87,16 @@ class Callback extends \Magento\Framework\App\Action\Action
         $result = $this->jsonResultFactory->create();
         $params = $this->getRequest()->getParams();
 
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            /*
-             * Error 405
-             * Método no permitido.
-             * Se finaliza
-             */
-            $result->setHttpResponseCode(\Magento\Framework\Webapi\Exception::HTTP_FORBIDDEN);
-
-            return $result;
-        }
-
         try{
+            if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+                /*
+                 * Error 405
+                 * Método no permitido.
+                 * Se finaliza
+                 */
+                throw new \Exception();
+            }
+
             $ctOrderId = $params["ct_order_id"];
             $order = $this->_orderFactory->create('Magento\Sales\Model\Order')->load($ctOrderId);
 
@@ -109,9 +106,8 @@ class Callback extends \Magento\Framework\App\Action\Action
                  * Orden no encontrada
                  * Se finaliza
                  */
-                $result->setHttpResponseCode(\Magento\Framework\Webapi\Exception::HTTP_NOT_FOUND);
 
-                return $result;
+                throw new \Exception();
             }
 
             /*
@@ -153,9 +149,7 @@ class Callback extends \Magento\Framework\App\Action\Action
                  * Se termina el proceso.
                  */
 
-                $result->setHttpResponseCode(\Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST);
-
-                return $result;
+                throw new \Exception();
             }
             /*
              * Si los montos corresponden revisamos y actualizamos el estado
@@ -167,9 +161,7 @@ class Callback extends \Magento\Framework\App\Action\Action
                  * Se termina el proceso.
                  */
 
-                $result->setHttpResponseCode(\Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST);
-
-                return $result;
+                throw new \Exception();
             }
 
             if($order->canInvoice()) {
@@ -184,20 +176,16 @@ class Callback extends \Magento\Framework\App\Action\Action
                 $order->addStatusHistoryComment(__('Notified customer about invoice #%1.', $invoice->getId()))
                     ->setIsCustomerNotified(true)
                     ->save();
-            }else{
-                $invoice = $order->getInvoiceCollection()->getFirstItem();
             }
 
             if ($signedResponse["ct_estado"] == PagoFacil::RESPONSE_CODE_COMPLETED) {
                 $this->method->createTransaction($order,$invoice,$params);
                 $invoice->setState(Invoice::STATE_PAID);
-                $invoice->save();
             } else {
                 /*
                  * Acá la puedes marcar como pendiente o fallida.
                  */
-                $invoice->setState(Invoice::STATE_OPEN);
-                $invoice->save();
+                throw new \Exception();
             }
 
             /*
@@ -205,18 +193,15 @@ class Callback extends \Magento\Framework\App\Action\Action
              * TODO OK.
              */
         }catch (\Exception $e){
-
             /*
              * Montos no corresponden. Posible inyección de datos.
              * Se termina el proceso.
              */
+            $this->messageManager->addErrorMessage(__("There has been an error with your payment. Please contact the store administrator."));
 
-            $result->setHttpResponseCode(\Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST);
-
-            return $result;
         }
 
-        return $result;
+        $this->http->setRedirect($this->_url->getUrl("checkout/onepage/success"));
     }
 
     /**

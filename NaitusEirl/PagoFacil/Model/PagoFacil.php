@@ -57,9 +57,41 @@ class PagoFacil extends \Magento\Payment\Model\Method\AbstractMethod
      */
     protected $_canAuthorize = true;
 
-    public function createTransaction(Order $order,$data){
+    /**
+     * @var Order\Email\Sender\OrderSender
+     */
+    protected $orderSender;
 
+    /**
+     * @var Order\Email\Sender\InvoiceSender
+     */
+    protected $invoiceSender;
+
+    public function createTransaction(Order $order,Order\Invoice $invoice,$data = array()){
+        $payment = $order->getPayment();
+        $payment->setTransactionId($data["ct_firma"]);
+        $payment->setCurrencyCode('USD');
+        $payment->setIsTransactionClosed(true);
+        $payment->registerCaptureNotification($order->getGrandTotal(), true);
+        $order->save();
+
+        $invoice = $payment->getCreatedInvoice();
+        if ($order->getIsVirtual()) {
+            $status = $order->getStatus();
+        } else {
+            $status = "processing";
+        }
+
+        if ($invoice && !$order->getEmailSent()) {
+            //$this->orderSender->send($order);
+            $message = __('New order email sent');
+            $order->addStatusToHistory($status, $message, true)->save();
+        }
+        if ($invoice && !$invoice->getEmailSent()) {
+            //$this->invoiceSender->send($invoice);
+            $message = __('Notified customer about invoice #%1', $invoice->getIncrementId());
+            $order->addStatusToHistory($status, $message, true)->save();
+        }
     }
-
 
 }

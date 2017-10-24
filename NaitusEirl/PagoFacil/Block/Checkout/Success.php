@@ -68,11 +68,11 @@ class Success extends Template {
 
         $this->addData([
             "amount"    =>  $order->getGrandTotal(),
-            "order_id" => $order->getIncrementId(),
+            "order_id" => $order->getId(),
             "email" => $order->getCustomerEmail(),
             "token_service" => $paymentMethod->getConfigData("token_service"),
             "token_store" => $paymentMethod->getConfigData("token_store"),
-            "submit_url" => $this->getSubmitUrl((boolean)$paymentMethod->getConfigData("sandbox"))
+            "submit_url" => $this->getSubmitUrl((boolean)$paymentMethod->getConfigData("sandbox")),
         ]);
 
         $transaction = new Transaccion($this->getOrderId(),$this->getTokenStore(),$this->getAmount(),$this->getTokenService(),$this->getEmail());
