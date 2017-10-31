@@ -164,24 +164,26 @@ class Payment extends \Magento\Framework\App\Action\Action
                 throw new \Exception();
             }
 
-            if($order->canInvoice()) {
-                $invoice = $this->_invoiceService->prepareInvoice($order);
-                $invoice->register();
-                $invoice->setState(Invoice::STATE_OPEN);
-                $invoice->save();
-                $transactionSave = $this->_transaction->addObject($invoice)->addObject($invoice->getOrder());
-                $transactionSave->save();
-                $this->_invoiceSender->send($invoice);
-                //send notification code
-                $order->addStatusHistoryComment(__('Notified customer about invoice #%1.', $invoice->getId()))
-                    ->setIsCustomerNotified(true)
-                    ->save();
-            }
-
             if ($signedResponse["ct_estado"] == PagoFacil::RESPONSE_CODE_COMPLETED) {
-                $this->method->createTransaction($order,$invoice,$params);
-                $invoice->setState(Invoice::STATE_PAID);
+                if($order->canInvoice()) {
+                    $invoice = $this->_invoiceService->prepareInvoice($order);
+                    $invoice->register();
+                    $invoice->setState(Invoice::STATE_OPEN);
+                    $invoice->save();
+                    $transactionSave = $this->_transaction->addObject($invoice)->addObject($invoice->getOrder());
+                    $transactionSave->save();
+                    $this->_invoiceSender->send($invoice);
+                    //send notification code
+                    $order->addStatusHistoryComment(__('Notified customer about invoice #%1.', $invoice->getId()))
+                        ->setIsCustomerNotified(true)
+                        ->save();
+                    $this->method->createTransaction($order,$invoice,$params);
+                    $invoice->setState(Invoice::STATE_PAID);
+                }
             } else {
+                $order->addStatusHistoryComment(__('Pago Facil marked payment as %1',$signedResponse["ct_estado"]))
+                    ->setIsCustomerNotified(false)
+                    ->save();
                 /*
                  * Acá la puedes marcar como pendiente o fallida.
                  */

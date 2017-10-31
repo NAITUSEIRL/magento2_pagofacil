@@ -189,16 +189,29 @@ class Callback extends \Magento\Framework\App\Action\Action
             }
 
             if ($signedResponse["ct_estado"] == PagoFacil::RESPONSE_CODE_COMPLETED) {
-                $this->method->createTransaction($order,$invoice,$params);
-                $invoice->setState(Invoice::STATE_PAID);
-                $invoice->save();
-            } else {
-                /*
-                 * Acá la puedes marcar como pendiente o fallida.
-                 */
-                $invoice->setState(Invoice::STATE_OPEN);
-                $invoice->save();
+                if($order->canInvoice()) {
+                    $invoice = $this->_invoiceService->prepareInvoice($order);
+                    $invoice->register();
+                    $invoice->setState(Invoice::STATE_OPEN);
+                    $invoice->save();
+                    $transactionSave = $this->_transaction->addObject($invoice)->addObject($invoice->getOrder());
+                    $transactionSave->save();
+                    $this->_invoiceSender->send($invoice);
+                    //send notification code
+                    $order->addStatusHistoryComment(__('Notified customer about invoice #%1.', $invoice->getId()))
+                        ->setIsCustomerNotified(true)
+                        ->save();
+                    $this->method->createTransaction($order,$invoice,$params);
+                    $invoice->setState(Invoice::STATE_PAID);
+                }else{
+                    $invoice = $order->getInvoiceCollection()->getFirstItem();
+                }
+            }else{
+                $order->addStatusHistoryComment(__('Pago Facil marked payment as %1',$signedResponse["ct_estado"]))
+                    ->setIsCustomerNotified(false)
+                    ->save();
             }
+            $invoice->save();
 
             /*
              * Terminamos el proceso con resultado 200
