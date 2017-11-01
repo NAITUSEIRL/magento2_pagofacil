@@ -67,6 +67,14 @@ class PagoFacil extends \Magento\Payment\Model\Method\AbstractMethod
      */
     protected $invoiceSender;
 
+    /**
+     * Create payment transaction with order, invoice and data request
+     *
+     * @param Order $order
+     * @param Order\Invoice $invoice
+     * @param array $data
+     * @return void
+     */
     public function createTransaction(Order $order,Order\Invoice $invoice,$data = array()){
         $payment = $order->getPayment();
         $payment->setTransactionId($data["ct_firma"]);
