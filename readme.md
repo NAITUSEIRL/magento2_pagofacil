@@ -7,5 +7,5 @@
 5. Llenar al menos "Token Servicio", "Token Secret" y activar el metodo de pago.
 6. Limpiar caches
 
-##### Source:
+##### Otras instrucciones de instalación:
 [https://belvg.com/blog/how-to-install-module-manually-on-magento-2.html](https://belvg.com/blog/how-to-install-module-manually-on-magento-2.html)
