@@ -1,4 +1,4 @@
-#####Instrucciones para habilitar y configurar modulo
+##### Instrucciones para habilitar y configurar modulo
 1. Copiar la carpeta "NaitusEirl" a "app/code"
 2. Habilitar el modulo con el comando **php bin/magento module:enable NaitusEirl_PagoFacil**
 3. Correr instaladores con el comando **php bin/magento setup:upgrade**
