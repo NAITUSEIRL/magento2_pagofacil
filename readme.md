@@ -6,3 +6,6 @@
 4. Acceder a Stores -> Configuration -> Sales -> Payment Methods -> Pago Facil
 5. Llenar al menos "Token Servicio", "Token Secret" y activar el metodo de pago.
 6. Limpiar caches
+
+##### Source:
+[https://belvg.com/blog/how-to-install-module-manually-on-magento-2.html](https://belvg.com/blog/how-to-install-module-manually-on-magento-2.html)
