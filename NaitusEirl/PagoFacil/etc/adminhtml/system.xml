@@ -23,9 +23,6 @@
                     <label>Customer Message</label>
                     <comment>Mensaje que recibirán los clientes al seleccionar el medio de pago.</comment>
                 </field>
-                <field id="token_store" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Token Tienda</label>
-                </field>
                 <field id="token_service" translate="label" type="text" sortOrder="65" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Token Servicio</label>
                 </field>

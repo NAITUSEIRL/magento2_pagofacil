@@ -22,6 +22,7 @@
                 <redirect>1</redirect>
                 <trade_name>EmpresasCTM</trade_name>
                 <url_commerce>http://www.empresasctm.cl</url_commerce>
+                <token_store>597020000543</token_store>
                 <debugReplaceKeys>MERCHANT_KEY</debugReplaceKeys>
                 <paymentInfoKeys>FRAUD_MSG_LIST</paymentInfoKeys>
                 <privateInfoKeys>FRAUD_MSG_LIST</privateInfoKeys>

@@ -68,7 +68,7 @@ class PagoFacil extends \Magento\Payment\Model\Method\AbstractMethod
     protected $invoiceSender;
 
     /**
-     * Create payment transaction with order, invoice and data request
+     * Crear transaccion
      *
      * @param Order $order
      * @param Order\Invoice $invoice

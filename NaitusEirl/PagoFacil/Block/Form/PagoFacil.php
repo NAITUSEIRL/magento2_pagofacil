@@ -5,7 +5,7 @@ namespace NaitusEirl\PagoFacil\Block\Form;
 class PagoFacil extends \Magento\Payment\Block\Form
 {
     /**
-     * Checkmo template
+     * Pago Facil template
      *
      * @var string
      */

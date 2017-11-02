@@ -58,6 +58,8 @@ class Success extends Template {
     }
 
     /**
+     * Inicializar data para visualizar
+     *
      * @return $this
      */
     protected function initData(){
@@ -84,7 +86,7 @@ class Success extends Template {
     }
 
     /**
-     * Get last order instance
+     * Obtener la ultima orden
      *
      * @return Order
      */
@@ -93,6 +95,8 @@ class Success extends Template {
     }
 
     /**
+     * Obtener instancia del metodo de pago
+     *
      * @return mixed|PagoFacil
      */
     protected function getPaymentMethod(){
@@ -100,7 +104,7 @@ class Success extends Template {
     }
 
     /**
-     * Get one page checkout model
+     * Obtener one page checkout model
      *
      * @return \Magento\Checkout\Model\Type\Onepage
      * @codeCoverageIgnore
@@ -111,6 +115,8 @@ class Success extends Template {
     }
 
     /**
+     * Obtener pago facil endpoint url
+     *
      * @param bool $sandbox
      * @return string
      */
