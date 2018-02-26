@@ -2,13 +2,8 @@
 
 namespace NaitusEirl\PagoFacil\Controller\Gateway;
 
-use Magento\Framework\App\Action\Context;
-use Magento\Framework\App\Action\Action;
 use ctala\transaccion\classes\Response;
-use Magento\Framework\Controller\Result\Raw;
-use Magento\Framework\Webapi\Exception;
 use Magento\Sales\Model\Order\Invoice;
-use Magento\Sales\Model\OrderFactory;
 use NaitusEirl\PagoFacil\Model\PagoFacil;
 use Magento\Payment\Helper\Data as PaymentHelper;
 use Magento\Sales\Model\Order\Email\Sender\InvoiceSender;

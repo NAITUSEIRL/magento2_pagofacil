@@ -4,7 +4,6 @@ namespace NaitusEirl\PagoFacil\Block\Checkout;
 
 use Magento\Checkout\Model\Type\Onepage;
 use Magento\Framework\Encryption\EncryptorInterface;
-use Magento\Framework\ObjectManager\ObjectManager;
 use Magento\Framework\View\Element\Template;
 use Magento\Sales\Model\Order;
 use NaitusEirl\PagoFacil\Model\PagoFacil;
